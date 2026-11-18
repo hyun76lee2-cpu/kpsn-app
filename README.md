@@ -1,21 +1,33 @@
-# KPSN 안드로이드 앱
+# IMM 진도계 (안드로이드)
 
-KPSN 사이트(https://hyun76lee2-cpu.github.io/KPSN-KOREAN_PUBLIC_SEISMIC_NETWORK/)를 앱 안에서 열고,
-가속도 센서를 **전체 정밀도**로 사이트에 넘겨주는 앱이에요.
+스마트폰 가속도 센서로 IMM 진도를 실시간 계산하는 앱.
+화면과 계산은 `src/main/assets/imm-meter.html`(웹 앱과 같은 코드)에 있고,
+`MainActivity.java`는 센서를 최고 속도(보통 200 Hz)로 읽어 100 ms마다 넘겨준다.
 
-- 브라우저는 가속도를 0.1 m/s²(약 10 gal) 단위로 잘라 주기 때문에 진도 I~III 같은 작은 흔들림을 잴 수 없어요.
-  앱은 센서 원래 분해능(보통 0.01 gal 안팎)과 최고 속도(200~500 Hz)로 읽어요.
-- 화면·계산·공유는 사이트가 그대로 하므로, 사이트를 고치면 앱을 다시 만들 필요가 없어요.
-- 참여 중에는 화면이 꺼지지 않아요. 위치는 참여할 때 한 번 물어보고 약 1 km 단위로 반올림해 올려요.
+## 저장소에 올라가 있어야 하는 구조
 
-## APK 만들기 (GitHub Actions)
+```
+.github/workflows/build.yml
+build.gradle.kts
+settings.gradle.kts
+gradle.properties
+gradle/wrapper/gradle-wrapper.properties
+src/main/AndroidManifest.xml
+src/main/assets/imm-meter.html
+src/main/java/com/imm/meter/MainActivity.java
+```
 
-1. GitHub에 새 저장소(예: `KPSN-app`)를 만들고 이 폴더의 파일을 모두 올려요 (`.github` 폴더 포함).
-2. 저장소 → **Actions** 탭에서 *Build APK* 가 끝나기를 기다려요 (3~5분).
-3. 끝난 실행을 열고 아래 **Artifacts** 의 `kpsn-apk` 를 내려받아 압축을 풀면 `app-debug.apk` 가 있어요.
-4. 폰에 옮겨 설치해요 ("출처를 알 수 없는 앱" 허용 필요).
+GitHub 웹 업로드에서는 파일을 하나씩 고르지 말고, 압축을 푼 폴더 안의 내용을
+폴더째 업로드 창에 끌어다 놓아야 폴더 구조가 유지된다.
+`.github` 폴더는 숨김 폴더라 빠지기 쉬우니, 빠졌으면 `Add file > Create new file`에서
+경로를 `.github/workflows/build.yml`로 입력하고 내용을 붙여넣는다.
 
-## 주의
+## 빌드와 설치
 
-- 사이트의 `index.html`을 새 버전으로 먼저 올려야 앱 센서가 연결돼요 (사이트가 `window.ImmNative`를 찾아 씀).
-- 앱 안에서는 상태 줄에 "앱 센서(전체 정밀도) N Hz 수신"이라고 나오고, 지도에는 센서가 "폰 앱"으로 표시돼요.
+1. 저장소의 `Actions` 탭에서 `Build APK` 실행이 끝나기를 기다린다.
+   자동으로 안 돌면 `Build APK` 선택 후 `Run workflow`.
+2. 실패하면 `Show project files` 단계의 출력이 위 구조와 같은지 먼저 확인한다.
+3. 성공한 실행 화면 아래 `Artifacts`의 `imm-meter-apk`를 받아 압축을 풀고 폰에 설치한다
+   (출처를 알 수 없는 앱 설치 허용 필요).
+
+Android Studio가 있으면 폴더를 열고 `Build > Build App Bundle(s) / APK(s) > Build APK(s)`.

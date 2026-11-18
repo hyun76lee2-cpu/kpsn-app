@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.kpsn.app"
+    namespace = "com.imm.meter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.kpsn.app"
+        applicationId = "com.imm.meter"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1"
     }
 
     buildTypes {
